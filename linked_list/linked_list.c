@@ -74,9 +74,15 @@ bool if_list_empty(Node* head) {
     return false;
 }
 
+/**
+ * @brief Remove a list node at the head of the list
+ * 
+ * @param a_head - address of the pointer to the head of the list
+ * @return Node* temp_node - removed head of the list
+ */
 Node* remove_node_at_head(Node** a_head) {
-    Node* temp_node = (*a_head) -> next;
-    *a_head = temp_node;
+    Node* temp_node = (*a_head);
+    *a_head = temp_node -> next;
 
     return temp_node;
 }
@@ -106,7 +112,7 @@ Node* remove_node_at_tail_no_tail(Node** a_head) {
     return old_tail;
 }
 
-void print_list_addresses(Node** a_head, void (*print_function)(Node* node)) {
+void print_list(Node** a_head, void (*print_function)(Node* node)) {
     Node* temp = *a_head;
     while(temp != NULL) {
         print_function(temp);
@@ -122,4 +128,12 @@ void print_address_node(Node* node) {
 void print_values_int(Node* node) {
     int int_value = node -> value;
     printf("%d -> ", int_value);
+}
+
+void destroy_list(Node* node) {
+    while(node != NULL) {
+        Node* temp_node = node;
+        node = node -> next;
+        free(temp_node);
+    }
 }

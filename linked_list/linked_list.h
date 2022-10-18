@@ -27,8 +27,9 @@ Node* remove_node_at_tail_no_tail(Node** a_head);
 
 bool if_list_empty(Node* head);
 
-void print_list_addresses(Node** a_head, void (*print_function)(Node* node));
+void print_list(Node** a_head, void (*print_function)(Node* node));
 void print_address_node(Node* node);
 void print_values_int(Node* node);
+void destroy_list(Node* node);
 
 #endif

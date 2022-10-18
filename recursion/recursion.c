@@ -87,10 +87,9 @@ Tnode* create_BST(data_type* sorted_array, int left_most_idx_arr, int right_most
     int arr_middle = left_most_idx_arr + (right_most_idx_arr - left_most_idx_arr) / 2;
     // Declare and allocate memory for the new root_tree node
     Tnode* root_tree = malloc(sizeof(*root_tree));
-    root_tree -> value = (*sorted_array + arr_middle);
-    root_tree -> left_child = create_BST(sorted_array, left_most_idx_arr, arr_middle - 1);
-    root_tree -> right_child = create_BST(sorted_array, arr_middle + 1, right_most_idx_arr);
+    root_tree -> value = (*sorted_array + arr_middle); // set the value at the root to value at sorted_array[arr_middle]
+    root_tree -> left_child = create_BST(sorted_array, left_most_idx_arr, arr_middle - 1); // create left subtree using left sublist
+    root_tree -> right_child = create_BST(sorted_array, arr_middle + 1, right_most_idx_arr); // create right subtree using right sublist
 
-    return root_tree;
-
+    return root_tree; // return the root
 }
