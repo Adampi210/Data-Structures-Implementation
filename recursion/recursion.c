@@ -87,9 +87,56 @@ Tnode* create_BST(data_type* sorted_array, int left_most_idx_arr, int right_most
     int arr_middle = left_most_idx_arr + (right_most_idx_arr - left_most_idx_arr) / 2;
     // Declare and allocate memory for the new root_tree node
     Tnode* root_tree = malloc(sizeof(*root_tree));
-    root_tree -> value = (*sorted_array + arr_middle); // set the value at the root to value at sorted_array[arr_middle]
+    root_tree -> value = *(sorted_array + arr_middle); // set the value at the root to value at sorted_array[arr_middle]
     root_tree -> left_child = create_BST(sorted_array, left_most_idx_arr, arr_middle - 1); // create left subtree using left sublist
     root_tree -> right_child = create_BST(sorted_array, arr_middle + 1, right_most_idx_arr); // create right subtree using right sublist
 
     return root_tree; // return the root
 }
+
+// Recursive function to destroy BST - free memory of all the nodes
+void destroy_BST(Tnode* root_bst) {
+    if(root_bst != NULL) {
+        destroy_BST(root_bst -> left_child);
+        destroy_BST(root_bst -> right_child);
+        free(root_bst);
+    }
+}
+
+void print_BST_preorder(Tnode* root, char dir) {
+    printf("%c%d\n", dir, root -> value);
+    if(root -> left_child != NULL) {
+        print_BST_preorder(root -> left_child, 'l');
+    }
+    if(root -> right_child != NULL) {
+        print_BST_preorder(root -> right_child, 'r');
+    }
+}
+
+/*
+    Tail recursion:
+        - There are certain recursive calls that can be turned into an iteration easily
+        - If the last statement of a function is a recursion, that recursion is called tail recursion
+        - All recursive functions that are doing preorder or inorder traversal of the computation tree
+          potentially have a tail recursion:
+            -
+
+        - It is easiest to remove the tail recursion of a recursive function that does not return a value
+        - ex:
+            function(a, b, c) {
+                if(stopping_condition)
+                    base_case_body;
+                other_divide_and_conquer_body;
+                function(x, y, z);
+            }
+
+            becomes:
+
+            function(a, b, c) {
+                while(!stoppin_condition) {
+                    other_divide_and_conquer_body;
+                    a = x, b = y, c = z;
+                }
+                base_case_body;
+            }
+*/

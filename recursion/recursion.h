@@ -14,5 +14,7 @@ typedef struct _Tnode{
 int recursive_adder(unsigned int first_n, unsigned int second_n);
 long recursive_fib_number(unsigned int idx_fib_sequence);
 Tnode* create_BST(data_type* sorted_array, int left_most_idx_arr, int right_most_idx_arr);
+void print_BST_preorder(Tnode* root, char dir);
+void destroy_BST(Tnode* root_bst);
 
 #endif
