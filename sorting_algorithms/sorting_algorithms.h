@@ -16,4 +16,10 @@ void heapsort_w_downward_heapify(data_type* array, int size_arr);
 // Quicksort
 void quicksort_recursion(data_type* array, int idx_left_bound, int idx_right_bound);
 
+// Mergesort
+void mergesort_recursive(data_type* array, data_type* copy_arr, int left_idx, int right_idx);
+void mergesort_iterative(data_type* array, data_type* copy_arr, int left_idx, int right_idx);
+void mergesort(data_type* array, int size_arr, void (*mergesort_fn)(data_type*, data_type*, int, int));
+
+
 #endif

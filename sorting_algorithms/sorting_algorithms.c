@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "sorting_algorithms.h"
 
 /*
@@ -265,6 +266,10 @@ void quicksort_recursion(data_type *array, int idx_left_bound, int idx_right_bou
 
 // Mergesort
 
+int min(int left_value, int right_value) {
+    return left_value > right_value ? right_value : left_value;
+}
+
 /**
  * @brief This function merges two sorted arrays into a 1 sorted array.
  * Used during mergesort. Not optimized.
@@ -364,7 +369,7 @@ void merge_fast(data_type* array, data_type* copy_arr, int left_idx, int mid_idx
         if(copy_arr[idx_right_array] < copy_arr[idx_left_array]) {
             // Then insert that value in the new merged (sorted) array
             // And decrease the index in the right subarray (size it's reversed - so index decreases)
-            array[idx_array] = copy_arr[idx_right_array--]
+            array[idx_array] = copy_arr[idx_right_array--];
         }
         // Otherwise, the value in left subarray is less or equal to the value in right subarray
         // At current indecies in both subarrays
@@ -399,23 +404,40 @@ void mergesort_recursive(data_type* array, data_type* copy_arr, int left_idx, in
     }
     int mid_idx = (left_idx + right_idx) / 2; // First find the middle index, where the array is split into the two
     // Sorted subarrays -> left and right subarray, each sorted
-    mergecsort_recursive(array, copy_arr, left_idx, mid_idx);      // Then mergesort the left subarray recursively
-    mergecsort_recursive(array, copy_arr, mid_idx + 1, right_idx); // And mergesort the right subarray recursively
+    mergesort_recursive(array, copy_arr, left_idx, mid_idx);       // Then mergesort the left subarray recursively
+    mergesort_recursive(array, copy_arr, mid_idx + 1, right_idx);  // And mergesort the right subarray recursively
     merge_slow(array, copy_arr, left_idx, mid_idx, right_idx);     // Finally, merge the two sorted subarrays into a new sorted array
     // And return
     return;
 }
 
-// TODO: Finish commenting
-void mergesort_iterative(data_type* array, data_type* copy_arr, int left_idx, int right_idx) {
-    int size_full_arr = right_idx + 1;
-    int size_subarrays = 1;
-    int start_idx_subarr;
 
+/**
+ * @brief Sort the values in the array using iterative mergesort method. This method goes UP - 
+ * divides the array into single elements and merges them into arrays with increasing sizes until
+ * a single sorted (fully merged) array is created
+ * 
+ * @param array     address of the array to be sorted
+ * @param copy_arr  copy of the array used when merging
+ * @param left_idx  left index in the array to be sorted
+ * @param right_idx right index in the array to be sorted
+ */
+void mergesort_iterative(data_type* array, data_type* copy_arr, int left_idx, int right_idx) {
+    // The function would normally accept different parameters, but is structured this way so that
+    // It can be passed into another function
+    int size_full_arr = right_idx + 1; // Initialize size of the full array as the right index + 1
+    int size_subarrays = 1;            // Initialize size of the subarrays - start at each having 1 element
+    int start_idx_subarr;              // Declare start index of subarray - will change for each subarray
+
+    // Then keep going as long as the size of the subarrays is less than the full array size
+    // When the size of the subarrays eclipses the full arrays size then that's after the final merge -> so stop
     while(size_subarrays < size_full_arr) {
+        // Set starting index for the subarrays at 0 (start at leftmost subarray)
         start_idx_subarr = 0;
+
+        // Then go through each of the subarrays and merge them - merge 2 subarrays at a time
         while(start_idx_subarr < size_full_arr - size_subarrays) {
-            merge_fast(array, copy_arr, start_idx_subarr, start_idx_subarr + size_subarrays - 1, min(start_idx_subarr + 2 * size_subarrays - 1));
+            merge_fast(array, copy_arr, start_idx_subarr, start_idx_subarr + size_subarrays - 1, min(start_idx_subarr + 2 * size_subarrays - 1, size_full_arr - 1));
             start_idx_subarr += 2 * size_subarrays;
         }
         size_subarrays *= 2;
