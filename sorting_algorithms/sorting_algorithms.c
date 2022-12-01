@@ -267,7 +267,10 @@ void quicksort_recursion(data_type *array, int idx_left_bound, int idx_right_bou
 // Mergesort
 
 int min(int left_value, int right_value) {
-    return left_value > right_value ? right_value : left_value;
+    if(left_value > right_value) {
+        return right_value;
+    }
+    return left_value;
 }
 
 /**
@@ -285,8 +288,8 @@ void merge_slow(data_type* array, data_type* copy_arr, int left_idx, int mid_idx
     // Copy the two sorted subarrays:
     // left subarray starts at left idx and has a size of mid_idx - left_idx + 1
     // Right subarray starts at mid_idx + 1, and has a size of right_idx - mid_idx
-    memcpy(&copy_arr[left_idx], &array[left_idx], mid_idx - left_idx + 1);
-    memcpy(&copy_arr[mid_idx + 1], &array[mid_idx + 1], right_idx - mid_idx);
+    memcpy(&copy_arr[left_idx], &array[left_idx], (mid_idx - left_idx + 1) * sizeof(copy_arr[left_idx]));
+    memcpy(&copy_arr[mid_idx + 1], &array[mid_idx + 1], (right_idx - mid_idx) * sizeof(copy_arr[left_idx]));
     
     // Then initialize idecies in the left and right subarrays -> will go through the subarrays
     // And compare the fields in each of the subarray
@@ -348,7 +351,8 @@ void merge_fast(data_type* array, data_type* copy_arr, int left_idx, int mid_idx
     // Then copy the contents from array into copy array
     // Copy the two sorted subarrays:
     // left subarray starts at left idx and has a size of mid_idx - left_idx + 1
-    memcpy(&copy_arr[left_idx], &array[left_idx], mid_idx - left_idx + 1);
+    memcpy(&(copy_arr[left_idx]), &(array[left_idx]), (mid_idx - left_idx + 1) * sizeof(copy_arr[left_idx]));
+    
     // Optimization: copy the right subarray in reverse:
     // In the array, start at mid_idx + 1 (where the right subarray normally starts)
     // And go up to the right idx
@@ -411,7 +415,6 @@ void mergesort_recursive(data_type* array, data_type* copy_arr, int left_idx, in
     return;
 }
 
-
 /**
  * @brief Sort the values in the array using iterative mergesort method. This method goes UP - 
  * divides the array into single elements and merges them into arrays with increasing sizes until
@@ -428,7 +431,6 @@ void mergesort_iterative(data_type* array, data_type* copy_arr, int left_idx, in
     int size_full_arr = right_idx + 1; // Initialize size of the full array as the right index + 1
     int size_subarrays = 1;            // Initialize size of the subarrays - start at each having 1 element
     int start_idx_subarr;              // Declare start index of subarray - will change for each subarray
-
     // Then keep going as long as the size of the subarrays is less than the full array size
     // When the size of the subarrays eclipses the full arrays size then that's after the final merge -> so stop
     while(size_subarrays < size_full_arr) {
@@ -438,13 +440,12 @@ void mergesort_iterative(data_type* array, data_type* copy_arr, int left_idx, in
         // Then go through each of the subarrays and merge them - merge 2 subarrays at a time
         while(start_idx_subarr < size_full_arr - size_subarrays) {
             merge_fast(array, copy_arr, start_idx_subarr, start_idx_subarr + size_subarrays - 1, min(start_idx_subarr + 2 * size_subarrays - 1, size_full_arr - 1));
-            start_idx_subarr += 2 * size_subarrays;
+            start_idx_subarr = start_idx_subarr + 2 * size_subarrays;
         }
         size_subarrays *= 2;
     }
     return;
 }
-
 
 /**
  * @brief Uses one of the mergesort functions of a specific type to sort the array.
